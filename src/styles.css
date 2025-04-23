@@ -1,10 +1,29 @@
+* {
+  margin: 0;
+  padding: 0;
+}
 .App {
   font-family: sans-serif;
   text-align: center;
 }
+button {
+  padding: 10px 20px;
+  border: none;
+  font-weight: 600;
+  background-color: #04aa6d;
+  color: white;
+  border-radius: 10px;
+  cursor: pointer;
+}
 .container {
   display: flex;
-  flex-direction: column;
+  align-items: start;
+  gap: 15px;
+  margin: 10px;
+}
+.light-container {
+  display: flex;
+  flex-direction: row;
   gap: 10px;
   padding: 10px;
   width: fit-content;
@@ -15,35 +34,17 @@
 .counter {
   width: 50px;
   padding: 5px 10px;
-  background-color: rgb(0, 0, 0);
+  background-color: rgb(17, 17, 17);
   border-radius: 5px;
-  /* text-shadow: 0px 0px 5px red; */
-  filter: brightness(2);
 }
 .light {
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  filter: brightness(0.2);
-}
-.red {
-  background-color: red;
-}
-.yellow {
-  background-color: yellow;
-}
-.green {
-  background-color: green;
+  filter: brightness(0.12);
+  z-index: 1;
 }
 .active {
-  filter: brightness(2);
-}
-.red.active {
-  box-shadow: 0px 0px 20px 0px red;
-}
-.yellow.active {
-  box-shadow: 0px 0px 20px 0px yellow;
-}
-.green.active {
-  box-shadow: 0px 0px 20px 0px green;
+  filter: brightness(1.1);
+  z-index: 2;
 }
