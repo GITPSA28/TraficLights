@@ -1,53 +1,48 @@
-import { useEffect } from "react";
-import { useState } from "react";
 import Light from "./Light";
+import Counter from "./Counter";
+import Button from "./Button";
+import useTrafficLights from "./hooks/useTrafficLights";
 
 export default function TraficLight({ config, lights, layout = "vertical" }) {
-  const [cur, setCur] = useState("red");
-  const [isActive, setIsActive] = useState(false);
-  const [curTime, setCurTime] = useState(5);
-  useEffect(
-    function () {
-      let id;
-      id = setInterval(() => {
-        if (isActive) setCurTime((time) => (time > 0 ? time - 1 : 0));
-        if (isActive && curTime === 0) {
-          setCur(config[cur].next);
-          let next = config[cur].next;
-          setCurTime(config[next].time);
-        }
-      }, 1000);
-      return () => {
-        clearInterval(id);
-      };
-    },
-    [isActive, cur, curTime]
-  );
+  const { curColor, curTime, isActive, toggleActive, nextLight } =
+    useTrafficLights({ config });
   return (
-    <div class="container">
-      <div
-        className="light-container"
-        style={{ flexDirection: layout === "vertical" ? "column" : "row" }}
-      >
-        {lights.map((lightColor) => {
-          return (
-            <Light
-              key={lightColor}
-              lightColor={lightColor}
-              curColor={config[cur].color}
-            />
-          );
-        })}
-      </div>
-      <h1 className="counter" style={{ color: config[cur].color }}>
-        {curTime}
-      </h1>
-      <button
-        style={{ backgroundColor: `${isActive ? "#f44336" : "#04aa6d"}` }}
-        onClick={() => setIsActive((state) => !state)}
+    <div className="container">
+      <LightContainer lights={lights} layout={layout} curColor={curColor} />
+      <Counter color={curColor} time={curTime} />
+      <Controls
+        isActive={isActive}
+        nextLight={nextLight}
+        toggleActive={toggleActive}
+      />
+    </div>
+  );
+}
+
+function LightContainer({ lights, layout, curColor }) {
+  return (
+    <div
+      className="light-container"
+      style={{ flexDirection: layout === "vertical" ? "column" : "row" }}
+    >
+      {lights.map((lightColor) => {
+        return (
+          <Light key={lightColor} lightColor={lightColor} curColor={curColor} />
+        );
+      })}
+    </div>
+  );
+}
+function Controls({ isActive, toggleActive, nextLight }) {
+  return (
+    <div className="controls">
+      <Button
+        color={`${isActive ? "#f44336" : "#04aa6d"}`}
+        onClick={toggleActive}
       >
         {isActive ? "Stop" : "Start"}
-      </button>
+      </Button>
+      <Button onClick={nextLight}>Next</Button>
     </div>
   );
 }
