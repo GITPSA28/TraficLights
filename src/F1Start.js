@@ -1,20 +1,29 @@
-import Light from "./Light";
-import Counter from "./Counter";
 import Button from "./Button";
+import Counter from "./Counter";
+import Light from "./Light";
+import useF1Config from "./hooks/useF1Config";
 import useTrafficLights from "./hooks/useTrafficLights";
 
-export default function TraficLight({
-  config,
-  startLight,
-  lights,
-  layout = "vertical",
-}) {
+export default function F1Start() {
+  const { config, lights, resetStartTime } = useF1Config({
+    min: 2000,
+    max: 5000,
+  });
   const { curLightId, cur, curTime, isActive, toggleActive, nextLight } =
-    useTrafficLights({ config, startLight, timeUnit: 1 });
+    useTrafficLights({
+      config,
+      startLight: "red1",
+      timeUnit: 1000,
+      interval: 1000,
+    });
 
   return (
     <div className="container">
-      <LightContainer lights={lights} layout={layout} curLightId={curLightId} />
+      <LightContainer
+        lights={lights}
+        layout={"horizontal"}
+        curLightId={curLightId}
+      />
       <Counter
         color={lights.find((l) => l.id === curLightId).color}
         time={curTime}
@@ -28,7 +37,6 @@ export default function TraficLight({
     </div>
   );
 }
-
 function LightContainer({ lights, layout, curLightId }) {
   return (
     <div
